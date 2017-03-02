@@ -17,6 +17,8 @@ importFrom("stats", "AIC", "approx", "binom.test", "coefficients", "dbinom",
            "prop.test", "qchisq", "qlogis", "qnorm", "rbinom", "rmultinom", 
            "rnorm", "setNames", "spline", "uniroot", "wilcox.test",
            ".getXlevels", "binomial", "fisher.test", "pf")
+importFrom(plotly,plot_ly,add_trace,layout)#Interactive graph
+importFrom('magrittr','%>%')
 
 # functions
 export(AnotA, discrimPwr, discrimSS, discrim, #discrimr,
@@ -27,7 +29,7 @@ export(AnotA, discrimPwr, discrimSS, discrim, #discrimr,
        pd2pc, d.primePwr, d.primeSS, twoACpwr, clm2twoAC,
        dprime_table, dprime_test, dprime_compare, posthoc,
        dod, dod_fit, dodControl, dodSim, dodPwr, optimal_tau,
-       par2prob_dod, dod_nll, dod_null, dod_null_tau)
+       par2prob_dod, dod_nll, dod_null, dod_null_tau,discrimPwrCurve)
 
 S3method(print, dod)
 S3method(confint, dod_fit)

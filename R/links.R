@@ -352,23 +352,35 @@ doubletriangle <- function()
       (pf(q=3, df1=1, df2=1, ncp=eta[ok]^2*2/3, lower.tail=FALSE))^2
     pmin(pmax(eta, 1/9), 1) ## restrict to [1/9, 1] - just to be sure
   }
+  # doubletriangle$mu.eta <- function(eta) {
+  #   ok <- eta > 0 & eta < 20
+  #   eta.1 <- eta
+  #   eta.1[eta.1 <= 0] <- 1/9
+  #   eta.1[eta.1 >= 20] <- 1
+  #   if(sum(ok))
+  #     eta.1[ok] <-
+  #     2*pf(q=3, df1=1, df2=1, ncp=eta.1[ok]^2*2/3, lower.tail=FALSE)
+  #   eta.1 <- pmin(pmax(eta.1, 1/9), 1) ## restrict to [1/9, 1] - just to be sure
+  #   eta[eta <= 0] <- 0
+  #   eta[eta >= 20] <- 0
+  #   if(sum(ok)) {
+  #     d <- eta[ok]
+  #     eta[ok] <- eta.1 * sqrt(2/3) * dnorm(d/sqrt(6)) *
+  #       (pnorm(d/sqrt(2)) - pnorm(-d/sqrt(2)))
+  #   }
+  # 
+  #   pmax(eta, 0) ## gradient cannot be negative.
+  # }
   doubletriangle$mu.eta <- function(eta) {
     ok <- eta > 0 & eta < 20
-    eta.1 <- eta
-    eta.1[eta.1 <= 0] <- 1/9
-    eta.1[eta.1 >= 20] <- 1
-    if(sum(ok))
-      eta.1[ok] <-
-      2*pf(q=3, df1=1, df2=1, ncp=eta.1[ok]^2*2/3, lower.tail=FALSE)
-    eta.1 <- pmin(pmax(eta.1, 1/9), 1) ## restrict to [1/9, 1] - just to be sure
-    eta[eta <= 0] <- 0
-    eta[eta >= 20] <- 0
+    eta[eta <= 0] <- 1/9
+    eta[eta >= 20] <- 1
     if(sum(ok)) {
       d <- eta[ok]
-      eta[ok] <- eta.1 * sqrt(2/3) * dnorm(d/sqrt(6)) *
+      eta[ok] <- 2*pf(q=3, df1=1, df2=1, ncp=d^2*2/3, lower.tail=FALSE) * sqrt(2/3) * dnorm(d/sqrt(6)) *
         (pnorm(d/sqrt(2)) - pnorm(-d/sqrt(2)))
     }
-    
+
     pmax(eta, 0) ## gradient cannot be negative.
   }
   doubletriangle$linkfun <- function(mu) {

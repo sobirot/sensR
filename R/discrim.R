@@ -50,7 +50,7 @@ discrim <-
             length(conf.level) == 1L, is.numeric(conf.level),
             conf.level >= 0, conf.level <= 1)
   if(double == TRUE && method == "tetrad")
-    stop("There double method for the tetrat test is not implementet. Choose double=FALSE")
+    stop("The double method for the tetrat test is not implemented. Choose double=FALSE")
   m <- match.call(expand.dots=FALSE)
   method <- match.arg(method)
   test <- match.arg(test)
@@ -179,7 +179,7 @@ discrim <-
   res <- list(coefficients = table, p.value = p.value, call = call,
               test = test, method = method, statistic = stat,
               data = c("correct" = x, "total" = n), pd0 = pd0,
-              conf.level = conf.level, alt.scale = alt.scale)
+              conf.level = conf.level, alt.scale = alt.scale,double=double)
   if(stat != "exact")
     res$stat.value <- Stat
   if(stat == "score")
@@ -187,6 +187,7 @@ discrim <-
   if(stat == "likelihood")
     res$profile <- prof
   class(res) <- "discrim"
+  if (is.na(table[1,2])) message("Your observations are extreme: pc << pGuess. The standard errors are non-estimable: the likelihood based confidence intervals are still valid.")
   return(res)
 }
 
@@ -298,18 +299,29 @@ print.anota <-
 print.discrim <-
   function(x, digits = max(3, getOption("digits") - 3), ...)
 {
+   # print(x)
   text1 <- switch(x$statistic,
                   "exact" = "'exact' binomial test.",
                   "likelihood" = "likelihood root statistic.",
                   "Wald" = "Wald statistic.",
                   "score" = "Pearson and score statistics.")
-  cat(paste("\nEstimates for the", x$method,
+  cat(if (x$double== TRUE)
+    paste("\nEstimates for the","double",x$method,
             "discrimination protocol with", x$data[1],
             "correct\nanswers in",
             x$data[2], "trials. One-sided p-value and",
             round(100 * x$conf.level, 3),
             "% two-sided confidence\nintervals are based on the",
-            text1, "\n\n"))
+            text1, "\n\n")
+    else
+      paste("\nEstimates for the",x$method,
+            "discrimination protocol with", x$data[1],
+            "correct\nanswers in",
+            x$data[2], "trials. One-sided p-value and",
+            round(100 * x$conf.level, 3),
+            "% two-sided confidence\nintervals are based on the",
+            text1, "\n\n")
+      )
   print(x$coefficients, digits = digits)
   Pguess <- ifelse(x$method %in% c("duotrio", "twoAFC"), 1/2, 1/3)
   d.prime0 <- psyinv(pd2pc(x$pd0, Pguess), method = x$method)

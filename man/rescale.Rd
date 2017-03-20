@@ -60,7 +60,7 @@ pd2pc(pd, Pguess)
     \code{NA}}  
   \item{method}{the sensory discrimination protocol for which the
     results should apply}
-  \item{double}{logical, is a double discrimination protocol is used?}
+  \item{double}{logical, is a double discrimination protocol used?}
   \item{Pguess}{the guessing probability implied by the protocol; a
     numeric scalar between 0 and 1}
 }

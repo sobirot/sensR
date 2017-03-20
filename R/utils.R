@@ -10,6 +10,8 @@ rescale <-
   isPresent <- sapply(arg, function(arg) !is.null(m[[arg]]))
   if(sum(isPresent) != 1)
     stop("One and only one of pc, pd and d.prime should be given")
+  if(double == TRUE && method == "tetrad")
+    stop("The double method for the tetrat test is not implemented. Choose double=FALSE")
   method <- match.arg(method)
   if(double)
     Pguess <- pc0 <- ifelse(method %in% c("duotrio", "twoAFC"), 1/4, 1/9)
@@ -62,13 +64,15 @@ rescale <-
     res$std.err <- data.frame(pc = se.pc, pd = se.pd,
                               d.prime = se.d.prime)
   res$method <- method
+  res$double <- double
   class(res) <- "rescale"
   return(res)
 }
 
 print.rescale <- function(x, digits = getOption("digits"), ...)
 {
-  cat(paste("\nEstimates for the", x$method, "protocol:\n", sep = " "))
+  cat(if (x$double== TRUE) paste("\nEstimates for the double", x$method, "protocol:\n", sep = " ")
+    else paste("\nEstimates for the", x$method, "protocol:\n", sep = " "))
   print(coef(x))
   if(!is.null(x$std.err)) {
     cat("\nStandard errors:\n")

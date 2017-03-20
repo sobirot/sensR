@@ -104,7 +104,7 @@ discrim <-
                     d.prime0 >= 0)
           if(test == "similarity" && d.prime0 == 0)
               warning("'d.prime0' should be positive for a similarity test")
-          pc0 <- psyfun(d.prime0, method=method)
+          pc0 <- psyfun(d.prime0, method=method, double = double)
           pd0 <- pc2pd(pc=pc0, Pguess=Pguess)
       }
   }
@@ -187,7 +187,7 @@ discrim <-
   if(stat == "likelihood")
     res$profile <- prof
   class(res) <- "discrim"
-  if (is.na(table[1,2])) message("Your observations are extreme: pc << pGuess. The standard errors are non-estimable: the likelihood based confidence intervals are still valid.")
+  if (is.na(table[1,2])) message("Standard errors are not estimable due to an observed proportion either at or below guessing level or at 100%. Everything else is still valid.")
   return(res)
 }
 
@@ -360,9 +360,8 @@ plot.discrim <-
   z <- seq(-5, 5, length.out = length)
   y <- dnorm(z)
   y2 <- dnorm(z, mean = coef(x)[3, 1])
-  main.txt <- ifelse(main,
-                     paste("Distribution of sensory intensity for the",
-                           x$method, "test"), c("") )
+  main.txt <- ifelse(main,if (x$double== TRUE) paste("Distribution of sensory intensity for the double",x$method, "test")
+                     else paste("Distribution of sensory intensity for the",x$method, "test"), c("") )
   plot(z, y, type="l", xlab = "Sensory Magnitude",
        ylab = "", main = main.txt, las = 1, lty = 2, ...)
   lines(z, y2, col = "red", lty = 1, ...)

@@ -55,7 +55,7 @@ discrim(correct, total, d.prime0, pd0, conf.level = 0.95,
   \item{conf.level}{the confidence level for the confidence intervals}
   \item{method}{the discrimination protocol. Five allowed values:
     "twoAFC", "threeAFC", "duotrio", "tetrad", "triangle"}
-  \item{double}{logical, is a double discrimination protocol is used?}
+  \item{double}{logical, is a double discrimination protocol used?}
   \item{test}{the type of test}
   \item{statistic}{the statistic to be used for hypothesis testing and
     confidence intervals}

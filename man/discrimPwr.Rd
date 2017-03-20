@@ -35,7 +35,7 @@ d.primePwr(d.primeA, d.prime0 = 0, sample.size, alpha = 0.05,
     one}
   \item{method}{the discrimination protocol for which the power should
     be computed}
-    \item{double}{logical, is a double discrimination protocol is used?}
+    \item{double}{logical, is a double discrimination protocol used?}
   \item{pGuess}{the guessing probability for the discrimination
     protocol, e.g. 1/2 for duo-trio and 2-AFC, and 1/3 for
     triangle, tetrad and 3-AFC; scalar between zero and one}

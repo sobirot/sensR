@@ -29,7 +29,7 @@ export(AnotA, discrimPwr, discrimSS, discrim, #discrimr,
        pd2pc, d.primePwr, d.primeSS, twoACpwr, clm2twoAC,
        dprime_table, dprime_test, dprime_compare, posthoc,
        dod, dod_fit, dodControl, dodSim, dodPwr, optimal_tau,
-       par2prob_dod, dod_nll, dod_null, dod_null_tau,discrimPwrCurve)
+       par2prob_dod, dod_nll, dod_null, dod_null_tau,discrimPlot)
 
 S3method(print, dod)
 S3method(confint, dod_fit)

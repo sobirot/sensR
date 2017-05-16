@@ -10,8 +10,8 @@ rescale <-
   isPresent <- sapply(arg, function(arg) !is.null(m[[arg]]))
   if(sum(isPresent) != 1)
     stop("One and only one of pc, pd and d.prime should be given")
-  if(double == TRUE && method == "tetrad")
-    stop("The double method for the tetrat test is not implemented. Choose double=FALSE")
+  # if(double == TRUE && method == "tetrad")
+  #   stop("The double method for the tetrat test is not implemented. Choose double=FALSE")
   method <- match.arg(method)
   if(double)
     Pguess <- pc0 <- ifelse(method %in% c("duotrio", "twoAFC"), 1/4, 1/9)
@@ -129,7 +129,8 @@ psyfun <-
                      duotrio = doubleduotrio()$linkinv,
                      triangle = doubletriangle()$linkinv,
                      twoAFC = doubletwoAFC()$linkinv,
-                     threeAFC = doublethreeAFC()$linkinv)
+                     threeAFC = doublethreeAFC()$linkinv,
+                     tetrad = doubletetrad()$linkinv)
   }else{
     psyFun <- switch(method,
                      duotrio = duotrio()$linkinv,
@@ -162,6 +163,7 @@ psyinv <- function(pc,
   if(double){
     psyInv <- switch(method,
                      duotrio = doubleduotrio()$linkfun,
+                     tetrad = doubletetrad()$linkfun,
                      triangle = doubletriangle()$linkfun,
                      twoAFC = doubletwoAFC()$linkfun,
                      threeAFC = doublethreeAFC()$linkfun)
@@ -198,6 +200,7 @@ psyderiv <-
   if(double){
     psyDeriv <- switch(method,
                        duotrio = doubleduotrio()$mu.eta,
+                       tetrad = doubletetrad()$mu.eta,
                        triangle = doubletriangle()$mu.eta,
                        twoAFC = doubletwoAFC()$mu.eta,
                        threeAFC = doublethreeAFC()$mu.eta)

@@ -57,6 +57,13 @@ dprime=coefficients(discrim(10, 15, method="triangle", double = TRUE))[3,1]
 stopifnot(all.equal(psyderiv(dprime, method = "triangle", double = TRUE),
                     2*psyfun(dprime, method = "triangle") * 
                       psyderiv(dprime, method = "triangle"), tol=1e-6))
+
+#tetrad 
+dprime=coefficients(discrim(10, 15, method="tetrad", double = TRUE))[3,1]
+stopifnot(all.equal(psyderiv(dprime, method = "tetrad", double = TRUE),
+                    2*psyfun(dprime, method = "tetrad") * 
+                      psyderiv(dprime, method = "tetrad"), tol=1e-6))
+
 ## check g=f^2
 # duotrio
 f=psyfun(psyinv(10/15, method = "duotrio", double = TRUE), method = "duotrio")
@@ -79,5 +86,11 @@ stopifnot(all.equal(f,g, tol=1e-3))
 # triangle
 f=psyfun(psyinv(10/15, method = "triangle", double = TRUE), method = "triangle")
 g=sqrt(psyfun(psyinv(10/15, method = "triangle", double = TRUE),method = "triangle",double = TRUE))
+
+stopifnot(all.equal(f,g, tol=1e-3))
+
+#tetrad
+f=psyfun(psyinv(10/15, method = "tetrad", double = TRUE), method = "tetrad")
+g=sqrt(psyfun(psyinv(10/15, method = "tetrad", double = TRUE),method = "tetrad",double = TRUE))
 
 stopifnot(all.equal(f,g, tol=1e-3))

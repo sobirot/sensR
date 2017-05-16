@@ -49,8 +49,8 @@ discrim <-
             length(total) == 1L, is.numeric(total),
             length(conf.level) == 1L, is.numeric(conf.level),
             conf.level >= 0, conf.level <= 1)
-  if(double == TRUE && method == "tetrad")
-    stop("The double method for the tetrat test is not implemented. Choose double=FALSE")
+  # if(double == TRUE && method == "tetrad")
+  #   stop("The double method for the tetrat test is not implemented. Choose double=FALSE")
   m <- match.call(expand.dots=FALSE)
   method <- match.arg(method)
   test <- match.arg(test)
@@ -323,12 +323,15 @@ print.discrim <-
             text1, "\n\n")
       )
   print(x$coefficients, digits = digits)
-  Pguess <- ifelse(x$method %in% c("duotrio", "twoAFC"), 1/2, 1/3)
-  d.prime0 <- psyinv(pd2pc(x$pd0, Pguess), method = x$method)
+  if(x$double)
+    Pguess <- ifelse(x$method %in% c("duotrio", "twoAFC"), 1/4, 1/9)
+  else
+    Pguess <- ifelse(x$method %in% c("duotrio", "twoAFC"), 1/2, 1/3)
+  d.prime0 <- psyinv(pd2pc(x$pd0, Pguess), method = x$method, double = x$double)
   null.value <- switch(x$alt.scale,
                        "pd" = x$pd0,
                        "d-prime" = psyinv(pd2pc(x$pd0, Pguess),
-                       method=x$method))
+                       method=x$method, double = x$double))
   cat(paste("\nResult of", x$test, "test:\n"))
   if(x$statistic == "Wald")
     cat(paste("Wald statistic = ", format(x$stat.value, digits),

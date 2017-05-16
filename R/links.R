@@ -453,6 +453,58 @@ tetrad <- function()
   tetrad
 }
 
+
+doubletetrad <- function()
+{
+  doubletetrad <- binomial()
+  doubletetrad$link <- "Link for the unspecified tetrad test"
+  doubletetrad$linkinv <- function(eta) {
+    eps <- 1e-8
+    ok <- eta > eps & eta < 9
+    eta[eta <= eps] <- 1/9
+    eta[eta >= 9] <- 1
+    if(sum(ok)) {
+      tetrads.fun <- function(z, delta)
+        dnorm(z) * (2 * pnorm(z) * pnorm(z - delta) -
+                      pnorm(z - delta)^2)
+      eta[ok] <- sapply(eta[ok], function(eta) {
+        (1 - 2*integrate(tetrads.fun, -Inf, Inf, delta=eta)$value)^2 })
+    }
+    pmin(pmax(eta, 1/3), 1) ## restrict to [1/3, 1] - just to be sure
+  }
+  doubletetrad$mu.eta <- function(eta) {
+    eps <- 1e-8
+    ok <- eta > eps & eta < 9
+    eta[eta <= eps] <- 0
+    eta[eta >= 9] <- 0
+    if(sum(ok)) {
+      Linkinv <- function(eta) {
+        tetrads.fun <- function(z, delta)
+          dnorm(z) * (2 * pnorm(z) * pnorm(z - delta) -
+                        pnorm(z - delta)^2)
+        sapply(eta, function(eta) {
+          (1 - 2*integrate(tetrads.fun, -Inf, Inf, delta=eta)$value)^2 })
+      }
+      eta[ok] <- sapply(eta[ok], function(eta) grad(Linkinv, eta))
+      ### FIXME: Could probably do the integration by hand here.
+    }
+    pmax(eta, 0) ## gradient cannot be negative.
+  }
+  doubletetrad$linkfun <- function(mu) {
+    eps <- 1e-8 ## What is the right eps here?
+    ok <- mu > 1/9 & mu < 1 - eps
+    mu[mu <= 1/9] <- 0
+    mu[mu >= 1 - eps] <- Inf
+    if(sum(ok)) {
+      doubletetrads <- function(d, p) doubletetrad$linkinv(d) - p
+      mu[ok] <- sapply(mu[ok], function(mu)
+        uniroot(doubletetrads, c(0, 9), p = mu)$root)
+    }
+    pmax(mu, 0)
+  }
+  doubletetrad
+}
+
 ## twoAFC <- function() {
 ##   twoAFC <- binomial()
 ##   twoAFC$link <- "Link for the 2-AFC test"
